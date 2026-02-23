@@ -5,6 +5,14 @@ import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import "./globals.css";
 
+const repoName = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "";
+const isUserOrOrgPagesSite = repoName.endsWith(".github.io");
+const basePath =
+  process.env.GITHUB_ACTIONS === "true" && !isUserOrOrgPagesSite && repoName
+    ? `/${repoName}`
+    : "";
+const faviconPath = `${basePath}/favicon.ico?`;
+
 const bodyFont = IBM_Plex_Sans({
   subsets: ["latin"],
   variable: "--font-body",
@@ -20,7 +28,12 @@ const headingFont = Space_Grotesk({
 export const metadata: Metadata = {
   title: "Semantic Matter | Intelligent Data Ecosystems",
   description:
-    "Semantic infrastructure and knowledge graphs for complex data interoperability."
+    "Semantic infrastructure and knowledge graphs for complex data interoperability.",
+  icons: {
+    icon: faviconPath,
+    shortcut: faviconPath,
+    apple: faviconPath
+  }
 };
 
 export default function RootLayout({
@@ -30,6 +43,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <link rel="shortcut icon" type="image/x-icon" href={faviconPath} />
+      </head>
       <body
         className={`${bodyFont.variable} ${headingFont.variable} bg-ink text-slate-100 antialiased`}
       >

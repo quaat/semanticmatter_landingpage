@@ -5,8 +5,8 @@ export default function LearnPage() {
         Learn
       </h1>
       <p className="mt-6 max-w-3xl text-lg text-slate-300">
-        Access whitepapers, implementation guides, and architecture references
-        for semantic systems, metadata strategy, and graph-native platforms.
+        Read whitepapers, implementation guides, and architecture notes for
+        semantic systems and graph-based data work.
       </p>
     </section>
   );

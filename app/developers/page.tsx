@@ -5,8 +5,8 @@ export default function DevelopersPage() {
         Developers
       </h1>
       <p className="mt-6 max-w-3xl text-lg text-slate-300">
-        Build on open semantic standards with Graph APIs, plugin extensions, and
-        schema versioning workflows designed for enterprise engineering teams.
+        Build on open semantic standards with graph APIs, plugin extensions,
+        and schema versioning workflows for engineering teams.
       </p>
     </section>
   );

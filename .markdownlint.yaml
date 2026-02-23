@@ -1,0 +1,12 @@
+# Default state for all rules
+default: true
+
+# MD013/line-length - Line length
+MD013:
+  # Number of characters
+  # Set very long to support 1-sentence-per-line style.
+  line_length: 999
+  # Maximum line length for headings
+  heading_line_length: 88
+  # Maximum line length for code blocks
+  code_block_line_length: 88

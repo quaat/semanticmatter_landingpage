@@ -21,6 +21,7 @@ import {
   Sparkles,
   Waypoints
 } from "lucide-react";
+import ProductCarousel from "@/components/ui/ProductCarousel";
 
 type IconType = ComponentType<{ className?: string }>;
 
@@ -309,18 +310,26 @@ export default function GraphExplorerPage() {
                 validation.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Link
-                  href="/developers"
+                <a
+                  href="https://semanticmatter.github.io/graph-explorer/"
+                  target="_blank"
+                  rel="noreferrer"
                   className="inline-flex items-center gap-2 rounded-full border border-cyan-300 bg-cyan-300 px-6 py-3 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-200"
                 >
-                  Request Technical Demo
+                  Open live application
                   <ArrowRight className="h-4 w-4" />
+                </a>
+                <Link
+                  href="/developers"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-slate-100 transition-colors hover:bg-white/20"
+                >
+                  Request walkthrough
                 </Link>
                 <Link
                   href="/learn"
                   className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-slate-100 transition-colors hover:bg-white/10"
                 >
-                  Download Technical Whitepaper
+                  Read whitepaper
                 </Link>
               </div>
             </div>
@@ -368,7 +377,7 @@ export default function GraphExplorerPage() {
 
       <section className="mx-auto max-w-7xl px-6 py-14">
         <h2 className="font-[var(--font-heading)] text-3xl font-semibold md:text-4xl">
-          Implemented Capabilities
+          Implemented capabilities
         </h2>
         <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {implementedCapabilities.map((capability) => {
@@ -393,40 +402,31 @@ export default function GraphExplorerPage() {
 
       <section className="mx-auto max-w-7xl px-6 py-14">
         <h2 className="font-[var(--font-heading)] text-3xl font-semibold md:text-4xl">
-          Live Application Views
+          Live application views
         </h2>
         <p className="mt-4 max-w-3xl text-slate-300">
-          Screenshots from `public/graph_explorer_presentation` showing Data,
-          View, and Analyze workflows.
+          Screenshots from the Graph Explorer application showing Data, View,
+          and Analyze workflows.
         </p>
-        <div className="mt-8 space-y-5">
-          {screenshots.map((shot) => (
-            <article
-              key={shot.title}
-              className="overflow-hidden rounded-2xl border border-white/10 bg-white/5"
-            >
-              <img
-                src={shot.src}
-                alt={shot.title}
-                width={shot.width}
-                height={shot.height}
-                className="h-auto w-full"
-                loading="lazy"
-              />
-              <div className="border-t border-white/10 p-4">
-                <h3 className="font-[var(--font-heading)] text-lg font-semibold text-slate-100">
-                  {shot.title}
-                </h3>
-                <p className="mt-1 text-sm text-slate-300">{shot.caption}</p>
-              </div>
-            </article>
-          ))}
+        <p className="mt-3 text-sm text-slate-300">
+          Try it live:{" "}
+          <a
+            href="https://semanticmatter.github.io/graph-explorer/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-cyan-200 underline decoration-cyan-300/60 underline-offset-4 hover:text-cyan-100"
+          >
+            semanticmatter.github.io/graph-explorer
+          </a>
+        </p>
+        <div className="mt-8">
+          <ProductCarousel slides={screenshots} autoAdvanceMs={6000} />
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-14">
         <h2 className="font-[var(--font-heading)] text-3xl font-semibold md:text-4xl">
-          Problem Statement
+          Problem statement
         </h2>
         <div className="mt-8 grid gap-5 md:grid-cols-2">
           {painPoints.map((point) => (
@@ -442,7 +442,7 @@ export default function GraphExplorerPage() {
 
       <section className="mx-auto max-w-7xl px-6 py-14">
         <h2 className="font-[var(--font-heading)] text-3xl font-semibold md:text-4xl">
-          Architecture Deep Dive
+          Architecture deep dive
         </h2>
         <div className="mt-8 grid gap-5 md:grid-cols-2">
           {architectureLayers.map((layer) => {
@@ -471,7 +471,7 @@ export default function GraphExplorerPage() {
 
       <section className="mx-auto max-w-7xl px-6 py-14">
         <h2 className="font-[var(--font-heading)] text-3xl font-semibold md:text-4xl">
-          Reasoning and SHACL Status
+          Reasoning and SHACL status
         </h2>
         <div className="mt-8 grid gap-5 md:grid-cols-2">
           {statusCards.map((item) => (
@@ -497,7 +497,7 @@ export default function GraphExplorerPage() {
 
       <section className="mx-auto max-w-7xl px-6 py-14">
         <h2 className="font-[var(--font-heading)] text-3xl font-semibold md:text-4xl">
-          User Workflows
+          User workflows
         </h2>
         <div className="mt-8 grid gap-5 lg:grid-cols-2">
           {workflows.map((workflow) => (
@@ -523,7 +523,7 @@ export default function GraphExplorerPage() {
       <section className="mx-auto max-w-7xl px-6 py-14">
         <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
           <h2 className="font-[var(--font-heading)] text-2xl font-semibold md:text-3xl">
-            Knowledge Graph Analysis API Surface
+            Knowledge Graph Analysis API surface
           </h2>
           <p className="mt-3 text-sm text-slate-300">
             API operations currently wired in `services/kgApiService.ts`.
@@ -545,7 +545,7 @@ export default function GraphExplorerPage() {
         <div className="grid gap-8 lg:grid-cols-[1fr_1fr]">
           <article className="rounded-2xl border border-white/10 bg-white/5 p-6">
             <h2 className="font-[var(--font-heading)] text-2xl font-semibold md:text-3xl">
-              Performance and Scalability Signals
+              Performance and scalability signals
             </h2>
             <ul className="mt-5 space-y-3 text-sm text-slate-300">
               {performanceSignals.map((item) => (
@@ -558,7 +558,7 @@ export default function GraphExplorerPage() {
           </article>
           <article className="rounded-2xl border border-white/10 bg-white/5 p-6">
             <h2 className="font-[var(--font-heading)] text-2xl font-semibold md:text-3xl">
-              Confirmed Limitations
+              Confirmed limitations
             </h2>
             <ul className="mt-5 space-y-3 text-sm text-slate-300">
               {limits.map((item) => (
@@ -576,7 +576,7 @@ export default function GraphExplorerPage() {
         <div className="grid gap-8 lg:grid-cols-[1fr_1fr]">
           <article className="glass rounded-2xl p-6">
             <h2 className="font-[var(--font-heading)] text-2xl font-semibold md:text-3xl">
-              Security and Observability Posture
+              Security and observability posture
             </h2>
             <ul className="mt-5 space-y-3 text-sm text-slate-300">
               <li className="flex items-start gap-2">
@@ -598,7 +598,7 @@ export default function GraphExplorerPage() {
           </article>
           <article className="glass rounded-2xl p-6">
             <h2 className="font-[var(--font-heading)] text-2xl font-semibold md:text-3xl">
-              Deployment Model
+              Deployment model
             </h2>
             <ul className="mt-5 space-y-3 text-sm text-slate-300">
               <li className="flex items-start gap-2">
@@ -622,7 +622,7 @@ export default function GraphExplorerPage() {
 
       <section className="mx-auto max-w-7xl px-6 py-14">
         <h2 className="font-[var(--font-heading)] text-3xl font-semibold md:text-4xl">
-          Module Inventory (Key Files)
+          Module inventory (key files)
         </h2>
         <div className="mt-8 grid gap-4">
           {moduleInventory.map((item) => (
@@ -640,7 +640,7 @@ export default function GraphExplorerPage() {
       <section className="mx-auto max-w-7xl px-6 py-14">
         <div className="glass rounded-3xl p-8 md:p-10">
           <h2 className="font-[var(--font-heading)] text-3xl font-semibold md:text-4xl">
-            Roadmap Recommendations
+            Roadmap recommendations
           </h2>
           <div className="mt-6 grid gap-3">
             {roadmap.map((item, idx) => (
@@ -655,10 +655,10 @@ export default function GraphExplorerPage() {
           </div>
           <div className="mt-8 rounded-2xl border border-cyan-300/35 bg-cyan-300/[0.1] p-6">
             <h3 className="font-[var(--font-heading)] text-2xl font-semibold text-slate-100">
-              Build the Next Exploration Tier
+              Build the next exploration tier
             </h3>
             <p className="mt-3 max-w-3xl text-sm text-slate-200">
-              Graph Explorer now supports production-style API workflows for
+              Graph Explorer supports API workflows for
               reasoning and SHACL validation. Next priorities are local compute
               acceleration, richer query interfaces, and persistent collaboration
               workflows.
@@ -668,7 +668,7 @@ export default function GraphExplorerPage() {
                 href="/developers"
                 className="inline-flex items-center gap-2 rounded-full border border-cyan-300 bg-cyan-300 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-200"
               >
-                Plan a Technical Pilot
+                Start integration
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link

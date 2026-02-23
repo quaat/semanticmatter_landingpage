@@ -5,25 +5,25 @@ const products = [
     title: "THiNK",
     href: "/products/think",
     description:
-      "Semantic intelligence workspace for reasoning over enterprise knowledge at scale."
+      "Model, organize, and reason over structured knowledge using shared ontologies and graph-based methods."
   },
   {
     title: "Blobfish",
     href: "/products/blobfish",
     description:
-      "Adaptive metadata ingestion layer that normalizes fragmented pipelines."
+      "Ingest and standardize metadata from heterogeneous systems into a consistent, usable structure."
   },
   {
     title: "Data Federation",
     href: "/products/data-federation",
     description:
-      "Unified query and governance across decentralized data platforms."
+      "Query distributed data sources through a single interface without centralizing raw data."
   },
   {
     title: "Graph Explorer",
     href: "/products/graph-explorer",
     description:
-      "Visual graph analytics for real-time relationship discovery and decision support."
+      "Explore and analyze connected data through an interactive graph interface."
   }
 ];
 
@@ -34,8 +34,7 @@ export default function ProductsPage() {
         Products
       </h1>
       <p className="mt-4 max-w-2xl text-slate-300">
-        Composable products for designing, operating, and extending semantic data
-        systems in enterprise environments.
+        Products for teams that need to model, connect, and query data across systems.
       </p>
       <div className="mt-12 grid gap-6 md:grid-cols-2">
         {products.map((product) => (

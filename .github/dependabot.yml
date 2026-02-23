@@ -1,0 +1,79 @@
+version: 2
+
+registries:
+  dockerhub:
+    type: docker-registry
+    url: docker.io
+    username: ${{ secrets.DOCKER_USERNAME }}
+    password: ${{ secrets.DOCKER_PASSWORD }}
+
+updates:
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "03:14"
+  target-branch: main
+  labels:
+    - CI/CD
+    - skip-changelog
+  groups:
+    actions:
+      applies-to: "version-updates"
+      patterns: ["*"]
+    actions-security:
+      applies-to: "security-updates"
+      patterns: ["*"]
+
+- package-ecosystem: pip
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "03:26"
+  target-branch: main
+  labels:
+    - CI/CD
+    - skip-changelog
+  groups:
+    python-ci:
+      applies-to: "version-updates"
+      patterns: ["*"]
+    python-ci-security:
+      applies-to: "security-updates"
+      patterns: ["*"]
+
+- package-ecosystem: docker
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "03:23"
+  target-branch: main
+  labels:
+    - CI/CD
+    - skip-changelog
+  registries:
+    - dockerhub
+  groups:
+    docker:
+      applies-to: "version-updates"
+      patterns: ["*"]
+    docker-security:
+      applies-to: "security-updates"
+      patterns: ["*"]
+
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "03:46"
+  target-branch: main
+  labels:
+    - CI/CD
+    - skip-changelog
+  groups:
+    node-ci:
+      applies-to: "version-updates"
+      patterns: ["*"]
+    node-ci-security:
+      applies-to: "security-updates"
+      patterns: ["*"]

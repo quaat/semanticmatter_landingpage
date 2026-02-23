@@ -1,0 +1,119 @@
+name: CD - Release
+
+on:
+  push:
+    branches:
+      - main
+
+  # Manually trigger the workflow
+  workflow_dispatch:
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+env:
+  DEFAULT_REPO_BRANCH: 'main'
+
+jobs:
+  update-version:
+    name: Update the version
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'SemanticMatter'
+    outputs:
+      continue-workflow: ${{ steps.update-version-step.outputs.continue_workflow }}
+      version: ${{ steps.update-version-step.outputs.version }}
+      tag: ${{ steps.tag.outputs.tag }}
+
+    permissions:
+      # Required to push to the repository
+      contents: write
+
+    steps:
+    - name: Checkout ${{ github.repository }}
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+
+    - name: Set up git config
+      run: |
+        git config --global user.name "${{ vars.CI_CD_GIT_USER }}"
+        git config --global user.email "${{ vars.CI_CD_GIT_EMAIL }}"
+
+    - name: Set up Node v20
+      uses: actions/setup-node@v6
+      with:
+        node-version: "20"
+        cache: "npm"
+
+    - name: Update npm
+      run: npm update -g npm
+
+    - name: Install dependencies
+      run: sudo apt update && sudo apt install -qqy jq
+
+    - name: Update version
+      id: update-version-step
+      env:
+        REMOTE_URL: https://__token__:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+      run: |
+        chmod +x ./.github/utils/set_version.sh
+        ./.github/utils/set_version.sh
+
+        if [ -n "$(git status --porcelain package.json package-lock.json)" ]; then
+          echo "Version updated !"
+          continue_workflow=true
+        else
+          # The version has not changed - i.e. the workflow shouldn't continue.
+          continue_workflow=false
+          echo "Version not updated !"
+        fi
+
+        echo "continue_workflow=${continue_workflow}" >> $GITHUB_OUTPUT
+        version="$(jq -r '.version' package.json)"
+        echo "version=${version}" >> $GITHUB_OUTPUT
+
+        echo "Retrieved version after update: ${version}"
+
+    - name: Update changelog
+      if: steps.update-version-step.outputs.continue_workflow == 'true'
+      uses: docker://githubchangeloggenerator/github-changelog-generator:1.16.2
+      with:
+        args: --user "${{ github.repository_owner }}" --project "semanticmatter_landingpage" --token "${{ secrets.BOT_PAT }}" --release-branch "${{ env.DEFAULT_REPO_BRANCH }}" --exclude-labels "skip-changelog,duplicate,question,invalid,wontfix" --unreleased-label "v${{ steps.update-version-step.outputs.version }}:"
+
+    - name: Commit changes
+      if: steps.update-version-step.outputs.continue_workflow == 'true'
+      run: |
+        git add package.json package-lock.json CHANGELOG.md
+        git commit --amend -C HEAD
+
+    - name: Add new git tag
+      if: steps.update-version-step.outputs.continue_workflow == 'true'
+      id: tag
+      run: |
+        TAG="v${{ steps.update-version-step.outputs.version }}"
+        git tag -a $TAG -m "Release $TAG"
+        echo "tag=${TAG}" >> $GITHUB_OUTPUT
+
+    - name: Update '${{ env.DEFAULT_REPO_BRANCH }}'
+      if: steps.update-version-step.outputs.continue_workflow == 'true'
+      run: git push origin HEAD:refs/heads/${{ env.DEFAULT_REPO_BRANCH }} --force --tags
+
+  docker:
+    name: Build and Publish
+    needs: update-version
+    if: needs.update-version.outputs.continue-workflow == 'true'
+    uses: ./.github/workflows/ci-cd-docker.yml
+
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    with:
+      source-ref: ${{ needs.update-version.outputs.tag }}
+      version: ${{ needs.update-version.outputs.version }}
+      image-name: ${{ vars.IMAGE_NAME }}
+    secrets:
+      GITLAB_REGISTRY_USER: ${{ secrets.SINTEF_GITLAB_REGISTRY_USER }}
+      GITLAB_REGISTRY_PASSWORD: ${{ secrets.SINTEF_GITLAB_REGISTRY_PAT }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
